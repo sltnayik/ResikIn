@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResikIn - Solusi Bersih Untuk Negeri</title>
+    <title>ResikIn - Solusi Pelaporan Sampah Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assests/css/styles.css">
@@ -12,24 +12,38 @@
 
     <header class="header">
         <div class="container header-inner">
-            <div class="logo">
+            <a href="#top" class="logo">
                 <img src="assests/img/logo.jpeg" alt="Logo ResikIn">
-            </div>
+                <span>ResikIn</span>
+            </a>
             <nav class="nav-links">
-                <a href="#fitur" class="link-fitur">Fitur</a>
-                <a href="#masuk" class="btn btn-primary btn-sm">Login</a>
+                <a href="#about">Tentang</a>
+                <a href="#fitur">Fitur</a>
+                <a href="#lapor">Lapor</a>
+                <a href="#cta" class="btn btn-primary btn-sm">Login</a>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
+    <section id="top" class="hero">
         <div class="container hero-inner">
             <div class="hero-content">
-                <h1>Laporkan Sampah dengan Mudah, <br><span class="text-green">Didukung Sistem Pintar</span></h1>
-                <p>Platform digital untuk melaporkan dan mengelola masalah sampah di lingkungan Anda dengan cepat & efisien.</p>
+                <span class="eyebrow">Platform Pelaporan Sampah Berbasis Digital</span>
+                <h1>ResikIn membantu masyarakat dan petugas bekerja sama menjaga lingkungan lebih bersih, cepat, dan transparan.</h1>
+                <p>Laporkan kejadian sampah dengan mudah: kirim judul, deskripsi, lokasi, dan foto. Pantau proses penanganan hingga selesai dalam satu platform.</p>
                 <div class="hero-buttons">
                     <a href="#lapor" class="btn btn-primary">Laporkan Sekarang</a>
-                    <a href="#fitur" class="btn btn-outline">Lihat Fitur</a>
+                    <a href="#fitur" class="btn btn-outline">Jelajahi Fitur</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <strong>500+</strong>
+                        <p>Laporan terkirim</p>
+                    </div>
+                    <div class="stat-card">
+                        <strong>98%</strong>
+                        <p>Ditangani cepat</p>
+                    </div>
                 </div>
             </div>
             <div class="hero-image">
@@ -38,38 +52,129 @@
         </div>
     </section>
 
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-inner">
+                <div class="about-text">
+                    <h2 class="section-title">Apa itu ResikIn?</h2>
+                    <p>ResikIn adalah platform digital yang menghubungkan masyarakat dengan petugas kebersihan untuk membuat pelaporan sampah menjadi lebih cepat, jelas, dan terdokumentasi.</p>
+                    <p>Pengguna dapat membuat akun, mengirim laporan dengan lokasi dan foto, serta memantau status penanganan. Petugas mendapat dashboard untuk mengelola laporan, memperbarui status, dan mengatur prioritas.</p>
+                </div>
+                <div class="about-cards">
+                    <article class="info-card">
+                        <h3>Untuk Warga</h3>
+                        <p>Laporkan sampah di lingkungan sekitar, unggah bukti foto, dan pantau kemajuan penanganan dalam waktu nyata.</p>
+                    </article>
+                    <article class="info-card">
+                        <h3>Untuk Petugas</h3>
+                        <p>Kelola laporan masuk secara terstruktur, atur prioritas, dan perbarui status dari menunggu, diproses, hingga selesai.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="fitur" class="features">
         <div class="container">
-            <h2 class="section-title">Kenapa Memilih ResikIn?</h2>
+            <h2 class="section-title">Fitur Utama ResikIn</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-camera"></i></div>
+                    <div class="icon-box"><i class="fa-solid fa-file-circle-plus"></i></div>
                     <div class="feature-text">
-                        <h3>Lapor Cepat</h3>
-                        <p>Foto & Kirim dalam Sekejap</p>
+                        <h3>Form Laporan Mudah</h3>
+                        <p>Isi judul, deskripsi, lokasi, dan foto untuk laporan lengkap.</p>
                     </div>
                 </div>
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="icon-box"><i class="fa-solid fa-map-location-dot"></i></div>
                     <div class="feature-text">
-                        <h3>Tracking Real-Time</h3>
-                        <p>Pantau Status Langsung</p>
+                        <h3>Pelacakan Status</h3>
+                        <p>Monitor laporan dari menunggu, diproses, hingga selesai dengan transparan.</p>
                     </div>
                 </div>
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-desktop"></i></div>
+                    <div class="icon-box"><i class="fa-solid fa-user-check"></i></div>
+                    <div class="feature-text">
+                        <h3>Akun Pribadi</h3>
+                        <p>Simpan riwayat laporan dan kelola aktivitas pelaporan Anda.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-chart-simple"></i></div>
                     <div class="feature-text">
                         <h3>Dashboard Petugas</h3>
-                        <p>Kelola Laporan Mudah</p>
+                        <p>Kelola laporan masuk, update status, dan prioritaskan penanganan.</p>
                     </div>
                 </div>
-                <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-chart-column"></i></div>
-                    <div class="feature-text">
-                        <h3>Data & Analitik</h3>
-                        <p>Insight & Statistik</p>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="workflow">
+        <div class="container">
+            <h2 class="section-title">Cara Kerja ResikIn</h2>
+            <div class="workflow-grid">
+                <article class="workflow-step">
+                    <span class="step-number">1</span>
+                    <h3>Laporkan Sampah</h3>
+                    <p>Isi laporan dengan informasi lengkap dan lokasi kejadian.</p>
+                </article>
+                <article class="workflow-step">
+                    <span class="step-number">2</span>
+                    <h3>Verifikasi Petugas</h3>
+                    <p>Tim petugas menerima dan memeriksa laporan yang masuk.</p>
+                </article>
+                <article class="workflow-step">
+                    <span class="step-number">3</span>
+                    <h3>Penanganan Cepat</h3>
+                    <p>Petugas menindaklanjuti sampah yang dilaporkan secara teratur.</p>
+                </article>
+                <article class="workflow-step">
+                    <span class="step-number">4</span>
+                    <h3>Status Tersedia</h3>
+                    <p>Pengguna melihat progres laporan hingga tuntas.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="lapor" class="report">
+        <div class="container">
+            <h2 class="section-title">Buat Laporan Sampah</h2>
+            <div class="report-grid">
+                <div class="report-card">
+                    <p class="report-intro">Isi formulir berikut untuk membantu petugas menangani sampah di lingkungan Anda.</p>
+                    <form>
+                        <label for="report-title">Judul Laporan</label>
+                        <input type="text" id="report-title" class="report-input" placeholder="Contoh: Sampah menumpuk di selokan" />
+
+                        <label for="report-location">Lokasi</label>
+                        <input type="text" id="report-location" class="report-input" placeholder="Contoh: Jalan Melati, RW 03" />
+
+                        <label for="report-description">Deskripsi</label>
+                        <textarea id="report-description" class="report-input" rows="5" placeholder="Jelaskan kondisi sampah dan kebutuhan penanganan."></textarea>
+
+                        <label for="report-photo">Unggah Foto</label>
+                        <input type="file" id="report-photo" class="report-input" />
+
+                        <button type="button" class="btn btn-primary">Kirim Laporan</button>
+                    </form>
                 </div>
+                <aside class="status-panel">
+                    <h3>Status Laporan</h3>
+                    <div class="status-card status-pending">
+                        <h4>Menunggu</h4>
+                        <p>Laporan baru akan dicek oleh petugas kebersihan.</p>
+                    </div>
+                    <div class="status-card status-progress">
+                        <h4>Diproses</h4>
+                        <p>Petugas aktif menangani lokasi dan menyiapkan penanganan.</p>
+                    </div>
+                    <div class="status-card status-complete">
+                        <h4>Selesai</h4>
+                        <p>Penanganan selesai dan area kembali bersih.</p>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
@@ -79,36 +184,38 @@
             <h2 class="section-title">Dipercaya oleh Warga & Petugas</h2>
             <div class="testimonial-card">
                 <i class="fa-solid fa-quote-left quote-icon"></i>
-                <p class="quote-text">"ResikIn sangat membantu, sampah di area kami jadi cepat diangkut!"</p>
+                <p class="quote-text">"ResikIn membantu kami mengatur laporan sampah dan memastikan setiap permintaan cepat ditindaklanjuti."</p>
                 <p class="quote-author">— Ibu Siti, Ketua RW 05</p>
             </div>
         </div>
     </section>
 
-    <section class="cta">
+    <section id="cta" class="cta">
         <div class="container">
             <div class="cta-box">
                 <div class="cta-header">
-                    <h2>Lorem ipsum dolor sit.</h2>
+                    <h2>Mulai Bersih dari Sekitar Anda</h2>
+                    <p>Gabung bersama ResikIn untuk membuat lingkungan lebih bersih, sehat, dan terkelola.</p>
                 </div>
                 <div class="cta-body">
-                    <p>Lorem ipsum dolor sit amet consectetur.</p>
-                    <a href="#demo" class="btn btn-primary">Lorem, ipsum.</a>
+                    <a href="#lapor" class="btn btn-primary">Laporkan Sekarang</a>
                 </div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
-        <div class="container">
-            <div class="footer-logo">
+        <div class="container footer-inner">
+            <div class="footer-brand">
                 <img src="assests/img/logo.jpeg" alt="Logo ResikIn">
+                <div>
+                    <p class="tagline">Solusi Bersih Untuk Negeri</p>
+                </div>
             </div>
-            <p class="tagline">Solusi Bersih Untuk Negeri</p>
             <div class="footer-links">
-                <a href="#">Tentang Kami</a> <span class="dot">•</span>
-                <a href="#">Syarat & Ketentuan</a> <span class="dot">•</span>
-                <a href="#">Kebijakan Privasi</a>
+                <a href="#about">Tentang Kami</a>
+                <a href="#fitur">Fitur</a>
+                <a href="#lapor">Lapor</a>
             </div>
             <div class="social-icons">
                 <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
