@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
 import AppLogo from "@/components/common/app-logo";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
@@ -20,10 +21,30 @@ export default function AuthFormCard({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
+  const loginSchema = z.object({
+  email: z.string().min(1, "Email wajib diisi").email("Email tidak valid"),
+  password: z.string().min(1, "Password wajib diisi"),
+});
+  
   function handleSubmit(event) {
-    event.preventDefault();
-    setIsLoading(true);
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+
+  const result = loginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!result.success) {
+    setErrors(result.error.flatten().fieldErrors);
+    return;
+  }
+
+  setErrors({});
+  setIsLoading(true);
     localStorage.setItem("resikin-session", "active");
     localStorage.setItem("resikin-role", redirectHref.startsWith("/officer") ? "officer" : "user");
     router.push(redirectHref);
@@ -39,16 +60,23 @@ export default function AuthFormCard({
         {title}
       </h1>
       <p className="mb-6 text-center text-xs text-gray-500">{subtitle}</p>
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-3" noValidate>
         {fields.map((field) => (
-          <input
-            key={field.name}
-            type={field.type}
-            name={field.name}
-            placeholder={field.placeholder}
-            className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
-          />
-        ))}
+  <div key={field.name}>
+    <input
+      type={field.type}
+      name={field.name}
+      placeholder={field.placeholder}
+      className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
+    />
+
+    {errors[field.name] && (
+      <p className="mt-1 text-xs text-red-500">
+        {errors[field.name][0]}
+      </p>
+    )}
+  </div>
+))}
         <button
           type="submit"
           disabled={isLoading}
