@@ -17,7 +17,7 @@ export default function UserLoginPage() {
         footerLinkHref="/user/register"
         secondaryLinkText="Masuk sebagai petugas"
         secondaryLinkHref="/officer/login"
-        redirectHref="/user/dashboard"
+        role="user"
       />
     </PhoneShell>
   );

@@ -1,26 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import LoadingSpinner from "@/components/ui/loading-spinner";
+import { logoutAction } from "@/app/auth-actions";
 
 export default function LogoutButton({ className = "" }) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
-  function handleLogout() {
-    setIsLoading(true);
-    localStorage.removeItem("resikin-session");
-    localStorage.removeItem("resikin-role");
-    router.push("/login");
-  }
-
   return (
-    <>
-      {isLoading ? <LoadingSpinner fullscreen label="Keluar" /> : null}
-      <button type="button" onClick={handleLogout} className={className}>
+    <form action={logoutAction}>
+      <button type="submit" className={className}>
         Logout
       </button>
-    </>
+    </form>
   );
 }

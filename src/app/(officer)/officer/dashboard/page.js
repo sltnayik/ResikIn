@@ -17,6 +17,9 @@ export default async function OfficerDashboardPage() {
           <AppLogo />
           <LogoutButton className="rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-600 transition hover:border-emerald-200 hover:text-emerald-700 sm:text-sm" />
         </div>
+        <p className="mt-4 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+          Protected officer route
+        </p>
         <h1 className="mt-4 text-lg font-semibold text-gray-800 sm:text-3xl">Selamat datang Petugas</h1>
         <p className="mt-1 text-xs text-gray-500 sm:text-sm">Pantau dan kelola laporan warga hari ini.</p>
       </header>

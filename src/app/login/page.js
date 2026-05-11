@@ -8,6 +8,8 @@ const roles = [
     title: "Masyarakat",
     desc: "Masuk untuk membuat laporan dan memantau status penanganan.",
     href: "/user/login",
+    email: "user@gmail.com",
+    password: "user123",
     icon: HiUser,
     button: "Login Warga",
   },
@@ -15,6 +17,8 @@ const roles = [
     title: "Petugas",
     desc: "Masuk untuk melihat laporan masuk dan mengelola tindak lanjut.",
     href: "/officer/login",
+    email: "officer@gmail.com",
+    password: "officer123",
     icon: HiClipboardList,
     button: "Login Petugas",
   },
@@ -50,6 +54,10 @@ export default function LoginChoicePage() {
               </div>
               <h2 className="mt-5 text-lg font-bold text-gray-900">{role.title}</h2>
               <p className="mt-2 flex-1 text-sm leading-6 text-gray-500">{role.desc}</p>
+              <div className="mt-4 rounded-lg bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800">
+                <p>Email: {role.email}</p>
+                <p>Password: {role.password}</p>
+              </div>
               <span className="mt-5 inline-flex h-10 items-center justify-center rounded-lg bg-emerald-500 px-4 text-sm font-semibold text-white transition group-hover:bg-emerald-600">
                 {role.button}
               </span>

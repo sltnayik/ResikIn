@@ -17,7 +17,7 @@ export default function OfficerLoginPage() {
         footerLinkHref="/user/login"
         secondaryLinkText="Kembali ke pilihan login"
         secondaryLinkHref="/login"
-        redirectHref="/officer/dashboard"
+        role="officer"
       />
     </PhoneShell>
   );

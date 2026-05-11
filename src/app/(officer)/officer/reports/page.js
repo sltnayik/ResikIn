@@ -5,8 +5,14 @@ import { getReports } from "@/lib/reports";
 
 export const dynamic = "force-dynamic";
 
-export default async function OfficerReportsPage() {
-  const reports = await getReports();
+export default async function OfficerReportsPage({ searchParams }) {
+  const params = await searchParams;
+  const filters = {
+    search: params?.q || "",
+    status: params?.status || "semua",
+    time: params?.time || "semua",
+  };
+  const reports = await getReports(filters);
 
   return (
     <PhoneShell className="flex flex-col">
@@ -14,7 +20,7 @@ export default async function OfficerReportsPage() {
         <h1 className="text-center text-lg font-semibold text-gray-800 sm:text-3xl">Daftar Laporan</h1>
       </header>
       <div className="px-4 pt-4 sm:px-6 lg:px-8">
-        <OfficerReportsClient reports={reports} />
+        <OfficerReportsClient reports={reports} filters={filters} />
       </div>
       <MobileBottomNav basePath="/officer" active="reports" />
     </PhoneShell>

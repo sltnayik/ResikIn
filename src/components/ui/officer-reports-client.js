@@ -1,48 +1,53 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SupabaseReportCard from "@/components/ui/supabase-report-card";
 
-function isInRange(dateValue, range) {
-  if (range === "semua") return true;
+export default function OfficerReportsClient({ reports, filters }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+  const [searchValue, setSearchValue] = useState(filters.search);
 
-  const reportDate = new Date(dateValue);
-  const now = new Date();
-  const start = new Date(now);
+  const updateFilter = useCallback((name, value) => {
+    const params = new URLSearchParams(searchParams);
 
-  if (range === "hari-ini") {
-    start.setHours(0, 0, 0, 0);
-  }
+    if (!value || value === "semua") {
+      params.delete(name);
+    } else {
+      params.set(name, value);
+    }
 
-  if (range === "minggu-ini") {
-    start.setDate(now.getDate() - 7);
-  }
-
-  if (range === "bulan-ini") {
-    start.setMonth(now.getMonth() - 1);
-  }
-
-  return reportDate >= start;
-}
-
-export default function OfficerReportsClient({ reports }) {
-  const [statusFilter, setStatusFilter] = useState("semua");
-  const [timeFilter, setTimeFilter] = useState("semua");
-
-  const filteredReports = useMemo(() => {
-    return reports.filter((report) => {
-      const statusMatches = statusFilter === "semua" || report.status === statusFilter;
-      const timeMatches = isInRange(report.created_at, timeFilter);
-      return statusMatches && timeMatches;
+    startTransition(() => {
+      router.replace(params.toString() ? `${pathname}?${params.toString()}` : pathname, {
+        scroll: false,
+      });
     });
-  }, [reports, statusFilter, timeFilter]);
+  }, [pathname, router, searchParams]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateFilter("q", searchValue);
+    }, 350);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchValue, updateFilter]);
 
   return (
     <>
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+      <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_.75fr_.75fr]">
+        <input
+          type="search"
+          value={searchValue}
+          onChange={(event) => setSearchValue(event.target.value)}
+          placeholder="Cari nama, lokasi, jenis, atau deskripsi"
+          className="h-10 rounded-md border border-gray-200 px-3 text-xs outline-none focus:border-emerald-400 sm:text-sm"
+        />
         <select
-          value={statusFilter}
-          onChange={(event) => setStatusFilter(event.target.value)}
+          value={filters.status}
+          onChange={(event) => updateFilter("status", event.target.value)}
           className="h-10 rounded-md border border-gray-200 px-2 text-xs sm:text-sm"
         >
           <option value="semua">Semua Status</option>
@@ -51,8 +56,8 @@ export default function OfficerReportsClient({ reports }) {
           <option value="selesai">Selesai</option>
         </select>
         <select
-          value={timeFilter}
-          onChange={(event) => setTimeFilter(event.target.value)}
+          value={filters.time}
+          onChange={(event) => updateFilter("time", event.target.value)}
           className="h-10 rounded-md border border-gray-200 px-2 text-xs sm:text-sm"
         >
           <option value="semua">Semua Waktu</option>
@@ -61,10 +66,13 @@ export default function OfficerReportsClient({ reports }) {
           <option value="bulan-ini">Bulan ini</option>
         </select>
       </div>
+      {isPending ? (
+        <p className="mt-3 text-xs font-medium text-emerald-700">Memperbarui data...</p>
+      ) : null}
 
       <div className="grid flex-1 gap-3 px-4 py-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-        {filteredReports.length > 0 ? (
-          filteredReports.map((report) => (
+        {reports.length > 0 ? (
+          reports.map((report) => (
             <SupabaseReportCard
               key={report.id}
               report={report}

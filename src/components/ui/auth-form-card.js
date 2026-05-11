@@ -1,58 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
+import { useActionState } from "react";
 import AppLogo from "@/components/common/app-logo";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { loginAction } from "@/app/auth-actions";
+import { DUMMY_ACCOUNTS } from "@/lib/auth-config";
+
+const initialState = {
+  success: false,
+  message: "",
+  errors: {},
+};
+
+function FieldError({ message }) {
+  if (!message) return null;
+
+  return <p className="mt-1 text-xs text-red-500">{message}</p>;
+}
 
 export default function AuthFormCard({
   title,
   subtitle,
-  fields,
   buttonText,
   footerText,
   footerLinkText,
   footerLinkHref,
   secondaryLinkText,
   secondaryLinkHref,
-  redirectHref = "/user/dashboard",
+  role = "user",
 }) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const loginSchema = z.object({
-  email: z.string().min(1, "Email wajib diisi").email("Email tidak valid"),
-  password: z.string().min(1, "Password wajib diisi"),
-});
-  
-  function handleSubmit(event) {
-  event.preventDefault();
-
-  const formData = new FormData(event.target);
-
-  const result = loginSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
-
-  if (!result.success) {
-    setErrors(result.error.flatten().fieldErrors);
-    return;
-  }
-
-  setErrors({});
-  setIsLoading(true);
-    localStorage.setItem("resikin-session", "active");
-    localStorage.setItem("resikin-role", redirectHref.startsWith("/officer") ? "officer" : "user");
-    router.push(redirectHref);
-  }
+  const [state, formAction, isPending] = useActionState(loginAction, initialState);
+  const account = DUMMY_ACCOUNTS[role];
 
   return (
     <div className="leafy-bg flex min-h-[82vh] flex-col px-6 py-8 sm:px-8">
-      {isLoading ? <LoadingSpinner fullscreen label="Masuk" /> : null}
+      {isPending ? <LoadingSpinner fullscreen label="Masuk" /> : null}
       <div className="mb-8">
         <AppLogo />
       </div>
@@ -60,29 +43,43 @@ export default function AuthFormCard({
         {title}
       </h1>
       <p className="mb-6 text-center text-xs text-gray-500">{subtitle}</p>
-      <form onSubmit={handleSubmit} className="space-y-3" noValidate>
-        {fields.map((field) => (
-  <div key={field.name}>
-    <input
-      type={field.type}
-      name={field.name}
-      placeholder={field.placeholder}
-      className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
-    />
-
-    {errors[field.name] && (
-      <p className="mt-1 text-xs text-red-500">
-        {errors[field.name][0]}
-      </p>
-    )}
-  </div>
-))}
+      {state.message ? (
+        <p className="mb-4 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+          {state.message}
+        </p>
+      ) : null}
+      <form action={formAction} className="space-y-3" noValidate>
+        <input type="hidden" name="role" value={role} />
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            autoComplete="email"
+            className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
+          />
+          <FieldError message={state.errors?.email?.[0]} />
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            autoComplete="current-password"
+            className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
+          />
+          <FieldError message={state.errors?.password?.[0]} />
+        </div>
+        <div className="rounded-lg bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800">
+          <p>Email: {account.email}</p>
+          <p>Password: {account.password}</p>
+        </div>
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="h-10 w-full rounded-lg bg-emerald-500 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {buttonText}
+          {isPending ? "Memproses..." : buttonText}
         </button>
       </form>
       <div className="mt-4 text-center text-xs text-gray-500">
