@@ -19,12 +19,22 @@ export default async function OfficerReportsPage({ searchParams }) {
 
   return (
     <PhoneShell className="flex flex-col">
-      <header className="border-b border-gray-200 bg-white px-4 py-4 sm:px-6 lg:px-8">
-        <h1 className="text-center text-lg font-semibold text-gray-800 sm:text-3xl">Daftar Laporan</h1>
+      <header className="bg-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-emerald-300 sm:text-sm">Panel Petugas</p>
+              <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Daftar Laporan Aktif</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">Filter, pantau, dan tindak lanjut laporan warga dengan tampilan yang jelas dan responsif.</p>
+            </div>
+          </div>
+        </div>
       </header>
-      <div className="px-4 pt-4 sm:px-6 lg:px-8">
-        <OfficerReportsClient reports={reports} filters={filters} />
-      </div>
+      <main className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-7xl">
+          <OfficerReportsClient reports={reports} filters={filters} />
+        </div>
+      </main>
       <MobileBottomNav basePath="/officer" active="reports" />
     </PhoneShell>
   );

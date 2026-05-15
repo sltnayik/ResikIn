@@ -14,13 +14,7 @@ export default function UserDashboardClient({ initialReports }) {
       .channel("reports-updates")
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "reports" }, (payload) => {
         const updatedReport = payload.new;
-        setReports((current) =>
-          current.map((report) =>
-            report.id === updatedReport.id
-              ? { ...report, status: updatedReport.status, updated_at: updatedReport.updated_at }
-              : report
-          )
-        );
+        setReports((current) => current.map((report) => (report.id === updatedReport.id ? { ...report, status: updatedReport.status, updated_at: updatedReport.updated_at } : report)));
       })
       .subscribe();
 
@@ -33,23 +27,28 @@ export default function UserDashboardClient({ initialReports }) {
   const wasteTypesCount = useMemo(() => new Set(reports.map((report) => report.waste_type).filter(Boolean)).size, [reports]);
 
   return (
-    <div className="flex-1 px-4 py-4 sm:px-6 lg:px-8">
-      <section className="mb-4 grid gap-3 sm:grid-cols-3">
+    <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+      <section className="mb-6 grid gap-4 sm:grid-cols-3">
         <StatCard label="Total Laporan" value={reports.length} />
         <StatCard label="Urgensi Tinggi" value={highUrgencyCount} />
         <StatCard label="Jenis Sampah" value={wasteTypesCount} />
       </section>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-sm font-semibold text-gray-700 sm:text-base">Riwayat laporan</h2>
-        <Link href="/user/report" className="w-full rounded-md bg-emerald-500 px-4 py-2 text-center text-xs font-semibold text-white transition hover:bg-emerald-600 sm:w-auto sm:text-sm">
-          Buat Laporan
-        </Link>
+      <div className="mb-6 rounded-4xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">Laporan Terbaru</p>
+            <p className="mt-2 text-sm leading-6 text-gray-600">Semua laporan ditampilkan secara real-time. Periksa status dan lanjutkan jika perlu.</p>
+          </div>
+          <Link href="/user/report" className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
+            Buat Laporan Baru
+          </Link>
+        </div>
       </div>
-      <div className="grid gap-3 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {reports.length > 0 ? (
           reports.map((report) => <SupabaseReportCard key={report.id} report={report} />)
         ) : (
-          <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-gray-500 lg:col-span-2">Belum ada laporan yang dikirim.</div>
+          <div className="rounded-3xl border border-dashed border-gray-300 bg-slate-50 p-8 text-center text-sm text-gray-500 lg:col-span-2">Belum ada laporan yang dikirim.</div>
         )}
       </div>
     </div>

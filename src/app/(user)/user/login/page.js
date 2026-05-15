@@ -3,9 +3,7 @@ import PhoneShell from "@/components/ui/phone-shell";
 
 export default async function UserLoginPage({ searchParams }) {
   const params = await searchParams;
-  const successMessage = params?.registered
-    ? "Registrasi berhasil. Silakan login menggunakan email dan password Anda."
-    : "";
+  const successMessage = params?.registered ? "Registrasi berhasil. Silakan cek inbox email Anda untuk memverifikasi akun sebelum login." : "";
 
   return (
     <PhoneShell className="max-w-md">

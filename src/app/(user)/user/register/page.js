@@ -6,7 +6,7 @@ export default function UserRegisterPage() {
     <PhoneShell className="max-w-md">
       <AuthFormCard
         title="REGISTRASI"
-        subtitle="Buat akun untuk memulai"
+        subtitle="Daftar sekarang untuk mengakses layanan pelaporan dengan mudah."
         buttonText="Buat Akun"
         footerText="Sudah memiliki akun?"
         footerLinkText="Login"
