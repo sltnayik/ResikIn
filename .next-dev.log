@@ -1,0 +1,17 @@
+
+> resikin@0.1.0 dev
+> next dev -p 3000
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.55:3000
+- Environments: .env.local
+✓ Ready in 809ms
+Creating turbopack project { dir: 'D:\\tugas modul 8\\resikin', testMode: true }
+
+ GET /login 200 in 2.6s (next.js: 728ms, proxy.ts: 567ms, application-code: 1326ms)
+✓ Finished filesystem cache database compaction in 17.7s
+○ Compiling / ...
+ GET / 200 in 4.6min (next.js: 2.4min, proxy.ts: 18.6s, application-code: 115s)
+ GET / 200 in 5.0min (next.js: 17.5s, proxy.ts: 18.4s, application-code: 4.4min)
+[?25h

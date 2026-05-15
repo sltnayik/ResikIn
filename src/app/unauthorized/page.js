@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoutButton from "@/components/ui/logout-button";
 import PhoneShell from "@/components/ui/phone-shell";
 
 export default function UnauthorizedPage() {
@@ -12,12 +13,15 @@ export default function UnauthorizedPage() {
         <p className="mt-3 text-sm leading-6 text-gray-600">
           Akun yang sedang login tidak memiliki izin untuk membuka halaman ini.
         </p>
-        <Link
-          href="/login"
-          className="mt-6 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
-        >
-          Login ulang
-        </Link>
+        <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+          <Link
+            href="/login"
+            className="rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+          >
+            Ke dashboard saya
+          </Link>
+          <LogoutButton className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600" />
+        </div>
       </main>
     </PhoneShell>
   );

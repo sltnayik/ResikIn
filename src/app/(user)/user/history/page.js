@@ -2,11 +2,14 @@
 import MobileBottomNav from "@/components/ui/mobile-bottom-nav";
 import PhoneShell from "@/components/ui/phone-shell";
 import ReportList from "@/app/(user)/user/history/ReportList";
+import { USER_ROLES } from "@/lib/auth/constants";
+import { requireRole } from "@/lib/auth/session";
 import { getReports } from "@/lib/reports";
 
 export const dynamic = "force-dynamic";
 
 export default async function UserHistoryPage() {
+  await requireRole(USER_ROLES.MASYARAKAT);
   const reports = await getReports();
 
   return (

@@ -3,11 +3,14 @@ import MobileBottomNav from "@/components/ui/mobile-bottom-nav";
 import LogoutButton from "@/components/ui/logout-button";
 import PhoneShell from "@/components/ui/phone-shell";
 import UserDashboardClient from "@/components/ui/user-dashboard-client";
+import { USER_ROLES } from "@/lib/auth/constants";
+import { requireRole } from "@/lib/auth/session";
 import { getReports } from "@/lib/reports";
 
 export const dynamic = "force-dynamic";
 
 export default async function UserDashboardPage() {
+  await requireRole(USER_ROLES.MASYARAKAT);
   const reports = await getReports();
 
   return (
@@ -17,9 +20,6 @@ export default async function UserDashboardPage() {
           <AppLogo />
           <LogoutButton className="rounded-full border border-emerald-200 bg-white px-4 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 sm:text-sm" />
         </div>
-        <p className="mt-4 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-700">
-          Protected user route
-        </p>
         <h1 className="mt-4 max-w-3xl text-xl font-semibold text-gray-800 sm:text-3xl">Laporan Sampah di Sekitar Anda</h1>
         <p className="mt-2 max-w-2xl text-xs text-gray-600 sm:text-sm">Bantu kami menjaga kebersihan lingkungan dengan cepat dan mudah.</p>
       </div>

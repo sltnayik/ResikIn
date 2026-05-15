@@ -1,62 +1,110 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { DUMMY_ACCOUNTS } from "@/lib/auth-config";
-import { loginSchema } from "@/lib/validation";
+import { createClient } from "@/lib/supabase/server";
+import { getAuthErrorMessage } from "@/lib/auth/errors";
+import { getDashboardPath } from "@/lib/auth/session";
+import { loginSchema, registerSchema } from "@/lib/validation";
 
-const SESSION_COOKIE = "session";
-const ROLE_COOKIE = "role";
+const failedState = (message, errors = {}) => ({
+  success: false,
+  message,
+  errors,
+});
 
 export async function loginAction(_previousState, formData) {
   const validation = loginSchema.safeParse({
-    role: formData.get("role"),
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
   if (!validation.success) {
-    return {
-      success: false,
-      message: "Periksa kembali data login.",
-      errors: validation.error.flatten().fieldErrors,
-    };
+    return failedState("Periksa kembali data login.", validation.error.flatten().fieldErrors);
   }
 
-  const { role, email, password } = validation.data;
-  const account = DUMMY_ACCOUNTS[role];
+  const supabase = await createClient();
+  const { email, password } = validation.data;
+  const { error: loginError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-  if (email !== account.email || password !== account.password) {
-    return {
-      success: false,
-      message: "Email atau password tidak sesuai dengan akun dummy.",
-      errors: {
-        email: ["Gunakan email dummy yang sesuai role."],
-        password: ["Gunakan password dummy yang sesuai role."],
+  if (loginError) {
+    return failedState(getAuthErrorMessage(loginError), {
+      email: ["Pastikan email terdaftar."],
+      password: ["Pastikan password benar."],
+    });
+  }
+
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
+
+  if (claimsError || !userId) {
+    await supabase.auth.signOut();
+    return failedState("Session login tidak valid. Silakan coba lagi.");
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+
+  if (profileError || !profile?.role) {
+    await supabase.auth.signOut();
+    return failedState("Profil akun belum tersedia. Hubungi admin.");
+  }
+
+  redirect(getDashboardPath(profile.role));
+}
+
+export async function registerAction(_previousState, formData) {
+  const validation = registerSchema.safeParse({
+    nama_lengkap: formData.get("nama_lengkap"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validation.success) {
+    return failedState("Periksa kembali data registrasi.", validation.error.flatten().fieldErrors);
+  }
+
+  const supabase = await createClient();
+  const { nama_lengkap, email, password } = validation.data;
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        nama_lengkap,
       },
-    };
+    },
+  });
+
+  if (error) {
+    return failedState(getAuthErrorMessage(error), {
+      email: error.message?.toLowerCase().includes("registered")
+        ? ["Email sudah digunakan."]
+        : undefined,
+      password: error.message?.toLowerCase().includes("password")
+        ? ["Gunakan password yang lebih kuat."]
+        : undefined,
+    });
   }
 
-  const cookieStore = await cookies();
-  const cookieOptions = {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 2,
-  };
+  if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    await supabase.auth.signOut();
+    return failedState("Email sudah digunakan. Silakan login atau gunakan email lain.", {
+      email: ["Email sudah digunakan."],
+    });
+  }
 
-  cookieStore.set(SESSION_COOKIE, "active", cookieOptions);
-  cookieStore.set(ROLE_COOKIE, role, cookieOptions);
-
-  redirect(account.redirectPath);
+  await supabase.auth.signOut();
+  redirect("/user/login?registered=1");
 }
 
 export async function logoutAction() {
-  const cookieStore = await cookies();
-
-  cookieStore.delete(SESSION_COOKIE);
-  cookieStore.delete(ROLE_COOKIE);
-
+  const supabase = await createClient();
+  await supabase.auth.signOut();
   redirect("/login");
 }

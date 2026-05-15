@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : null;
+
 const nextConfig = {
   reactCompiler: true,
   images: {
@@ -7,10 +11,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-      {
-        protocol: "https",
-        hostname: "wsenkixdisnqixktfndt.supabase.co",
-      },
+      ...(supabaseHostname
+        ? [
+            {
+              protocol: "https",
+              hostname: supabaseHostname,
+            },
+          ]
+        : []),
     ],
   },
 };

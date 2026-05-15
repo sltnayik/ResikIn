@@ -1,11 +1,14 @@
 import PhoneShell from "@/components/ui/phone-shell";
 import MobileBottomNav from "@/components/ui/mobile-bottom-nav";
 import OfficerReportsClient from "@/components/ui/officer-reports-client";
+import { USER_ROLES } from "@/lib/auth/constants";
+import { requireRole } from "@/lib/auth/session";
 import { getReports } from "@/lib/reports";
 
 export const dynamic = "force-dynamic";
 
 export default async function OfficerReportsPage({ searchParams }) {
+  await requireRole(USER_ROLES.PETUGAS);
   const params = await searchParams;
   const filters = {
     search: params?.q || "",

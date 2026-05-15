@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase.js";
+import { createClient } from "@/lib/supabase/server";
 
 function getDateRangeStart(range) {
   if (range === "hari-ini") {
@@ -22,7 +22,28 @@ function getDateRangeStart(range) {
   return null;
 }
 
+async function withSignedImageUrls(supabase, reports) {
+  return Promise.all(
+    (reports || []).map(async (report) => {
+      if (!report.image_path) {
+        return report;
+      }
+
+      const { data, error } = await supabase.storage
+        .from("report-images")
+        .createSignedUrl(report.image_path, 60 * 10);
+
+      if (error) {
+        return { ...report, image_url: "" };
+      }
+
+      return { ...report, image_url: data?.signedUrl || "" };
+    })
+  );
+}
+
 export async function getReports(filters = {}) {
+  const supabase = await createClient();
   const search = String(filters.search || "")
     .trim()
     .replace(/[%,()]/g, " ");
@@ -55,15 +76,17 @@ export async function getReports(filters = {}) {
     return [];
   }
 
-  return data || [];
+  return withSignedImageUrls(supabase, data || []);
 }
 
 export async function getReportById(id) {
+  const supabase = await createClient();
   const { data, error } = await supabase.from("reports").select("*").eq("id", id).single();
 
-  if (error) {
+  if (error || !data) {
     return null;
   }
 
-  return data;
+  const [report] = await withSignedImageUrls(supabase, [data]);
+  return report;
 }

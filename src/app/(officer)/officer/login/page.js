@@ -7,17 +7,12 @@ export default function OfficerLoginPage() {
       <AuthFormCard
         title="LOGIN"
         subtitle="Masuk sebagai petugas"
-        fields={[
-          { name: "email", type: "email", placeholder: "Email" },
-          { name: "password", type: "password", placeholder: "Password" },
-        ]}
         buttonText="Login"
         footerText="Masuk sebagai masyarakat?"
         footerLinkText="Login warga"
         footerLinkHref="/user/login"
         secondaryLinkText="Kembali ke pilihan login"
         secondaryLinkHref="/login"
-        role="officer"
       />
     </PhoneShell>
   );

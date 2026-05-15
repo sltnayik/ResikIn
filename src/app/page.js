@@ -26,7 +26,7 @@ export default function HomePage() {
     {
       icon: HiUser,
       title: "Akun Pengguna",
-      desc: "Simulasi akun membuat flow pelaporan terasa lebih nyata dan terarah.",
+      desc: "Autentikasi Supabase menjaga laporan terhubung ke akun warga yang benar.",
     },
     {
       icon: HiChartBar,
@@ -70,7 +70,7 @@ export default function HomePage() {
             </div>
             <div className="mt-10 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-3">
               {[
-                ["500+", "Laporan simulasi"],
+                ["500+", "Laporan tercatat"],
                 ["98%", "Flow dipahami"],
                 ["24/7", "Entry point"],
               ].map(([value, label]) => (
@@ -102,7 +102,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
-              ["Untuk Warga", "Mulai laporan dari mana saja, lalu lanjutkan detailnya setelah login simulasi."],
+              ["Untuk Warga", "Mulai laporan dari mana saja, lalu lanjutkan detailnya setelah login."],
               ["Untuk Petugas", "Pantau laporan masuk melalui halaman dashboard dan daftar laporan."],
             ].map(([title, desc]) => (
               <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -162,7 +162,7 @@ export default function HomePage() {
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-emerald-300 text-emerald-950">
                   <HiCog className="h-3 w-3" />
                 </span>
-                Simulasi tanpa backend
+                Tersimpan di Supabase
               </div>
               <div className="flex items-center gap-2">
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-emerald-300 text-emerald-950">

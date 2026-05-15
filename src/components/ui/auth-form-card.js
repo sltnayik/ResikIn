@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import toast from "react-hot-toast";
 import AppLogo from "@/components/common/app-logo";
 import LoadingSpinner from "@/components/ui/loading-spinner";
-import { loginAction } from "@/app/auth-actions";
-import { DUMMY_ACCOUNTS } from "@/lib/auth-config";
+import { loginAction, registerAction } from "@/app/auth-actions";
 
 const initialState = {
   success: false,
@@ -28,14 +28,24 @@ export default function AuthFormCard({
   footerLinkHref,
   secondaryLinkText,
   secondaryLinkHref,
-  role = "user",
+  mode = "login",
+  successMessage = "",
 }) {
-  const [state, formAction, isPending] = useActionState(loginAction, initialState);
-  const account = DUMMY_ACCOUNTS[role];
+  const action = mode === "register" ? registerAction : loginAction;
+  const [state, formAction, isPending] = useActionState(action, initialState);
+  const isRegister = mode === "register";
+
+  useEffect(() => {
+    if (!state.message) return;
+
+    toast.error(state.message);
+  }, [state.message]);
 
   return (
     <div className="leafy-bg flex min-h-[82vh] flex-col px-6 py-8 sm:px-8">
-      {isPending ? <LoadingSpinner fullscreen label="Masuk" /> : null}
+      {isPending ? (
+        <LoadingSpinner fullscreen label={isRegister ? "Membuat akun" : "Masuk"} />
+      ) : null}
       <div className="mb-8">
         <AppLogo />
       </div>
@@ -43,13 +53,29 @@ export default function AuthFormCard({
         {title}
       </h1>
       <p className="mb-6 text-center text-xs text-gray-500">{subtitle}</p>
+      {successMessage ? (
+        <p className="mb-4 rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
+          {successMessage}
+        </p>
+      ) : null}
       {state.message ? (
         <p className="mb-4 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
           {state.message}
         </p>
       ) : null}
       <form action={formAction} className="space-y-3" noValidate>
-        <input type="hidden" name="role" value={role} />
+        {isRegister ? (
+          <div>
+            <input
+              type="text"
+              name="nama_lengkap"
+              placeholder="Nama lengkap"
+              autoComplete="name"
+              className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
+            />
+            <FieldError message={state.errors?.nama_lengkap?.[0]} />
+          </div>
+        ) : null}
         <div>
           <input
             type="email"
@@ -65,14 +91,10 @@ export default function AuthFormCard({
             type="password"
             name="password"
             placeholder="Password"
-            autoComplete="current-password"
+            autoComplete={isRegister ? "new-password" : "current-password"}
             className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-400"
           />
           <FieldError message={state.errors?.password?.[0]} />
-        </div>
-        <div className="rounded-lg bg-emerald-50 px-3 py-2 text-xs leading-5 text-emerald-800">
-          <p>Email: {account.email}</p>
-          <p>Password: {account.password}</p>
         </div>
         <button
           type="submit"
@@ -96,9 +118,7 @@ export default function AuthFormCard({
           {secondaryLinkText}
         </Link>
       ) : null}
-      <div className="mt-auto pt-8 text-center text-[11px] text-gray-400">
-        ResikIn App
-      </div>
+      <div className="mt-auto pt-8 text-center text-[11px] text-gray-400">ResikIn App</div>
     </div>
   );
 }

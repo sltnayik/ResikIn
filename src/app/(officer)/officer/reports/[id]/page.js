@@ -4,11 +4,14 @@ import { notFound } from "next/navigation";
 import PhoneShell from "@/components/ui/phone-shell";
 import MapPreview from "@/components/ui/map-preview";
 import ReportStatusActions from "@/components/ui/report-status-actions";
+import { USER_ROLES } from "@/lib/auth/constants";
+import { requireRole } from "@/lib/auth/session";
 import { getReportById } from "@/lib/reports";
 
 export const dynamic = "force-dynamic";
 
 export default async function OfficerReportDetailPage({ params }) {
+  await requireRole(USER_ROLES.PETUGAS);
   const { id } = await params;
   const report = await getReportById(id);
 

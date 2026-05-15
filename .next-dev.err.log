@@ -1,0 +1,47 @@
+
+<--- Last few GCs --->
+
+[8056:00000256518D9000]  1339539 ms: Mark-Compact 3353.7 (3610.4) -> 3317.5 (3606.0) MB, pooled: 2 MB, 104519.42 / 699.71 ms  (average mu = 0.151, current mu = 0.166) allocation failure; scavenge might not succeed
+[8056:00000256518D9000]  1377804 ms: Mark-Compact 3362.0 (3619.1) -> 3325.9 (3615.3) MB, pooled: 0 MB, 29689.23 / 897.36 ms  (average mu = 0.172, current mu = 0.224) allocation failure; scavenge might not succeed
+
+FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 00007FF6AA81B6AF node::OnFatalError+1343
+ 2: 00007FF6AB463257 v8::Function::NewInstance+423
+ 3: 00007FF6AB263937 v8::base::AddressSpaceReservation::AddressSpaceReservation+322071
+ 4: 00007FF6AB267644 v8::base::AddressSpaceReservation::AddressSpaceReservation+337700
+ 5: 00007FF6AB2765DC v8::internal::StrongRootAllocatorBase::deallocate_impl+16604
+ 6: 00007FF6AB275E1B v8::internal::StrongRootAllocatorBase::deallocate_impl+14619
+ 7: 00007FF6AC6F4BAD v8::base::UnsignedDivisionByConstant<unsigned __int64>+2791405
+ 8: 00007FF6AB261400 v8::base::AddressSpaceReservation::AddressSpaceReservation+312544
+ 9: 00007FF6AB27BC8A X509_STORE_set_cleanup+5098
+10: 00007FF6AB287AE8 uv_timer_set_repeat+19096
+11: 00007FF6AB29F48C uv_timer_set_repeat+115772
+12: 00007FF6AB29F425 uv_timer_set_repeat+115669
+13: 00007FF6AAF721EB v8::RegExp::GetFlags+16683
+14: 00007FF6AAF720BD v8::RegExp::GetFlags+16381
+15: 00007FF6AAFB1CB6 v8::RegExp::GetFlags+277494
+16: 00007FF6AAFB5C05 v8::RegExp::GetFlags+293701
+17: 00007FF6AAFB2FFE v8::RegExp::GetFlags+282430
+18: 00007FF6AAFB23F4 v8::RegExp::GetFlags+279348
+19: 00007FF6AB478AB0 v8::Object::GetPropertyNames+400
+20: 00007FF6AA888B9E napi_get_all_property_names+366
+21: 00007FF6AA888A1F napi_get_property_names+31
+22: 00007FFC75F41F52 napi_register_module_v1+33106
+23: 00007FFC77040CF4 napi_register_module_v1+17854196
+24: 00007FFC771635D1 napi_register_module_v1+19044305
+25: 00007FFC76FDAB14 napi_register_module_v1+17435924
+26: 00007FFC76FE71CA napi_register_module_v1+17486794
+27: 00007FFC7715E7C7 napi_register_module_v1+19024327
+28: 00007FFC7700BD58 napi_register_module_v1+17637208
+29: 00007FF6AA870766 node_api_create_buffer_from_arraybuffer+5062
+30: 00007FF6AB4CAC3B uv_run+1867
+31: 00007FF6AB4CA7AF uv_run+703
+32: 00007FF6AA92D07F node::DecodeWrite+351
+33: 00007FF6AA7AAB26 node::MultiIsolatePlatform::DisposeIsolate+243542
+34: 00007FF6AA875FCC node::Start+1052
+35: 00007FF6AB8924C2 AES_cbc_encrypt+2546
+36: 00007FF6AC6FE2B4 v8::base::UnsignedDivisionByConstant<unsigned __int64>+2830068
+37: 00007FFD302CE8D7 BaseThreadInitThunk+23
+38: 00007FFD3244C3FC RtlUserThreadStart+44

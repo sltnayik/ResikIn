@@ -15,7 +15,13 @@ export default function OfficerDashboardClient({ initialReports }) {
       .channel("reports-updates")
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "reports" }, (payload) => {
         const updatedReport = payload.new;
-        setReports((current) => current.map((report) => (report.id === updatedReport.id ? { ...report, ...updatedReport } : report)));
+        setReports((current) =>
+          current.map((report) =>
+            report.id === updatedReport.id
+              ? { ...report, status: updatedReport.status, updated_at: updatedReport.updated_at }
+              : report
+          )
+        );
       })
       .subscribe();
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { supabase } from "@/lib/supabase.js";
+import { createClient } from "@/lib/supabase/server";
 import { reportSchema } from "@/lib/validation";
 
 const initialActionState = {
@@ -11,6 +11,18 @@ const initialActionState = {
 };
 
 export async function createReport(_previousState = initialActionState, formData) {
+  const supabase = await createClient();
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
+
+  if (claimsError || !userId) {
+    return {
+      success: false,
+      message: "Session tidak valid. Silakan login ulang.",
+      errors: {},
+    };
+  }
+
   const validation = reportSchema.safeParse({
     reporter_name: formData.get("reporter_name"),
     location_text: formData.get("location_text"),
@@ -32,7 +44,7 @@ export async function createReport(_previousState = initialActionState, formData
 
   const { image, ...reportFields } = validation.data;
   const extension = image.name.split(".").pop() || "jpg";
-  const filePath = `reports/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+  const filePath = `reports/${userId}/${crypto.randomUUID()}.${extension}`;
 
   const { error: uploadError } = await supabase.storage
     .from("report-images")
@@ -49,18 +61,17 @@ export async function createReport(_previousState = initialActionState, formData
     };
   }
 
-  const { data: publicUrlData } = supabase.storage
-    .from("report-images")
-    .getPublicUrl(filePath);
-
   const report = {
     ...reportFields,
-    image_url: publicUrlData.publicUrl,
+    reporter_id: userId,
+    image_path: filePath,
   };
 
   const { error } = await supabase.from("reports").insert(report);
 
   if (error) {
+    await supabase.storage.from("report-images").remove([filePath]);
+
     return {
       success: false,
       message: error.message || "Laporan gagal dikirim.",
@@ -81,6 +92,13 @@ export async function createReport(_previousState = initialActionState, formData
 }
 
 export async function deleteReportAction(id) {
+  const supabase = await createClient();
+  const { data: report } = await supabase
+    .from("reports")
+    .select("image_path")
+    .eq("id", id)
+    .single();
+
   const { error } = await supabase.from("reports").delete().eq("id", id);
 
   if (error) {
@@ -88,6 +106,10 @@ export async function deleteReportAction(id) {
       success: false,
       message: error.message || "Laporan gagal dihapus.",
     };
+  }
+
+  if (report?.image_path) {
+    await supabase.storage.from("report-images").remove([report.image_path]);
   }
 
   revalidatePath("/user/dashboard");
