@@ -14,6 +14,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   min-height: 100%;
@@ -27,11 +31,41 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Smooth transitions and animations */
+@layer utilities {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .animate-slideInRight {
+    animation: slideInRight 0.6s ease-out;
+  }
+}
+
 .leafy-bg {
-  background:
-    radial-gradient(circle at 10% 90%, #dcefdc 0%, transparent 35%),
-    radial-gradient(circle at 85% 82%, #d1eccc 0%, transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f7fbf7 72%, #edf7eb 100%);
+  background: radial-gradient(circle at 10% 90%, #dcefdc 0%, transparent 35%), radial-gradient(circle at 85% 82%, #d1eccc 0%, transparent 28%), linear-gradient(180deg, #ffffff 0%, #f7fbf7 72%, #edf7eb 100%);
 }
 
 .resikin-map-marker {
@@ -55,4 +89,22 @@ body {
   border-radius: 9999px;
   background: #ffffff;
   transform: translate(-50%, -50%);
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
